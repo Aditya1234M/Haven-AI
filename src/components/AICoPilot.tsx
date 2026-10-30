@@ -41,6 +41,7 @@ export function AICoPilot() {
   const [tempApiKey, setTempApiKey] = useState(aiConfig.apiKey || '');
   const [apiKeySaved, setApiKeySaved] = useState(false);
   const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
+  const [showKeyInput, setShowKeyInput] = useState(false);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -80,6 +81,7 @@ export function AICoPilot() {
     e.preventDefault();
     setAIConfig({ apiKey: tempApiKey.trim(), mode: tempApiKey.trim() ? 'live' : 'simulated' });
     setApiKeySaved(true);
+    setShowKeyInput(false);
     setTimeout(() => setApiKeySaved(false), 2000);
   };
 
@@ -142,36 +144,65 @@ export function AICoPilot() {
         </div>
       </div>
 
-      {/* Live API Key Vault Drawer (if Live Mode) */}
+      {/* Live API Status / Vault Drawer (if Live Mode) */}
       {aiConfig.mode === 'live' && (
         <motion.div
           initial={{ opacity: 0, height: 0 }}
           animate={{ opacity: 1, height: 'auto' }}
-          className="glass-card p-4 border-brand-gold/30 bg-surface-200/90"
+          className="glass-card p-3 px-4 border-brand-emerald/30 bg-surface-200/90"
         >
-          <form onSubmit={handleSaveApiKey} className="flex flex-col md:flex-row items-center gap-3">
-            <div className="flex items-center gap-2 text-xs text-brand-gold flex-shrink-0">
-              <ShieldCheck size={16} />
-              <span className="font-semibold">Gemini API Key Vault:</span>
+          {aiConfig.apiKey && !showKeyInput ? (
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 text-xs">
+              <div className="flex items-center gap-2 text-brand-emerald">
+                <span className="w-2 h-2 rounded-full bg-brand-emerald animate-pulse" />
+                <span className="font-semibold">Connected to Google Gemini 3.8 Flash (Live)</span>
+                <span className="text-white/40 font-mono text-[11px] hidden sm:inline">({maskApiKey(aiConfig.apiKey)})</span>
+              </div>
+              <button
+                onClick={() => setShowKeyInput(true)}
+                className="text-[11px] text-white/50 hover:text-white underline transition-colors"
+              >
+                Change Key
+              </button>
             </div>
+          ) : (
+            <div>
+              <form onSubmit={handleSaveApiKey} className="flex flex-col md:flex-row items-center gap-3">
+                <div className="flex items-center gap-2 text-xs text-brand-gold flex-shrink-0">
+                  <ShieldCheck size={16} />
+                  <span className="font-semibold">Gemini API Key:</span>
+                </div>
 
-            <input
-              type="password"
-              placeholder="Paste your Google Gemini API key (AIzaSy...)"
-              value={tempApiKey}
-              onChange={e => setTempApiKey(e.target.value)}
-              className="flex-1 bg-surface-300 border border-white/[0.08] rounded-xl px-3 py-1.5 text-xs text-white placeholder-white/20 focus:border-brand-gold focus:outline-none w-full"
-            />
+                <input
+                  type="password"
+                  placeholder="Paste your Google Gemini API key (AIzaSy...)"
+                  value={tempApiKey}
+                  onChange={e => setTempApiKey(e.target.value)}
+                  className="flex-1 bg-surface-300 border border-white/[0.08] rounded-xl px-3 py-1.5 text-xs text-white placeholder-white/20 focus:border-brand-gold focus:outline-none w-full"
+                />
 
-            <button type="submit" className="btn-gold text-xs py-1.5 px-4 flex-shrink-0 flex items-center gap-1">
-              {apiKeySaved ? <Check size={12} /> : null}
-              {apiKeySaved ? 'Saved in Memory' : 'Activate Live Key'}
-            </button>
-          </form>
-          <div className="flex items-center justify-between text-[11px] text-white/40 mt-2 px-1">
-            <span>🔒 Key remains strictly client-side in RAM and is never logged or saved to server.</span>
-            {aiConfig.apiKey && <span>Active: {maskApiKey(aiConfig.apiKey)}</span>}
-          </div>
+                <div className="flex items-center gap-2">
+                  <button type="submit" className="btn-gold text-xs py-1.5 px-4 flex-shrink-0 flex items-center gap-1">
+                    {apiKeySaved ? <Check size={12} /> : null}
+                    {apiKeySaved ? 'Saved in Memory' : 'Save Key'}
+                  </button>
+                  {aiConfig.apiKey && (
+                    <button
+                      type="button"
+                      onClick={() => setShowKeyInput(false)}
+                      className="btn-ghost text-xs py-1.5 px-2 text-white/50"
+                    >
+                      Cancel
+                    </button>
+                  )}
+                </div>
+              </form>
+              <div className="flex items-center justify-between text-[11px] text-white/40 mt-1.5 px-1">
+                <span>🔒 Key remains strictly client-side in RAM and is never logged or saved to server.</span>
+                {aiConfig.apiKey && <span>Active: {maskApiKey(aiConfig.apiKey)}</span>}
+              </div>
+            </div>
+          )}
         </motion.div>
       )}
 
