@@ -1,0 +1,130 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    min-height: 100vh;
+    overflow-x: hidden;
+    background: #0A0A0F;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.02);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: rgba(212, 168, 83, 0.3);
+    border-radius: 3px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(212, 168, 83, 0.5);
+  }
+}
+
+@layer components {
+  .glass-card {
+    @apply relative overflow-hidden rounded-2xl border border-white/[0.08] bg-white/[0.03] backdrop-blur-xl shadow-glass;
+  }
+
+  .glass-card-hover {
+    @apply glass-card transition-all duration-300 hover:border-white/[0.15] hover:bg-white/[0.06] hover:shadow-glass-lg;
+  }
+
+  .gold-gradient-text {
+    @apply bg-gradient-to-r from-brand-gold via-brand-gold-light to-brand-gold bg-clip-text text-transparent;
+  }
+
+  .gold-button {
+    @apply relative inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-gold px-6 py-3 font-display font-semibold text-surface-50 shadow-gold transition-all duration-300 hover:shadow-glow hover:scale-[1.02] active:scale-[0.98];
+  }
+
+  .ghost-button {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/[0.03] px-5 py-2.5 font-medium text-white/80 transition-all duration-300 hover:border-brand-gold/30 hover:bg-white/[0.06] hover:text-white;
+  }
+
+  .input-field {
+    @apply w-full rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3 font-body text-white/90 placeholder:text-white/30 outline-none transition-all duration-300 focus:border-brand-gold/50 focus:ring-2 focus:ring-brand-gold/20 focus:bg-white/[0.05];
+  }
+
+  .select-field {
+    @apply input-field appearance-none cursor-pointer;
+  }
+
+  .label-text {
+    @apply block text-sm font-medium text-white/60 mb-1.5;
+  }
+
+  .section-title {
+    @apply font-display text-2xl font-bold text-white;
+  }
+
+  .tab-button {
+    @apply relative px-5 py-2.5 text-sm font-medium text-white/50 transition-all duration-300 hover:text-white/80 rounded-lg;
+  }
+
+  .tab-button-active {
+    @apply tab-button text-brand-gold bg-brand-gold/10 border border-brand-gold/20;
+  }
+
+  .badge {
+    @apply inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-medium;
+  }
+
+  .badge-gold {
+    @apply badge bg-brand-gold/15 text-brand-gold border border-brand-gold/20;
+  }
+
+  .badge-emerald {
+    @apply badge bg-brand-emerald/15 text-brand-emerald border border-brand-emerald/20;
+  }
+
+  .badge-rose {
+    @apply badge bg-brand-rose/15 text-brand-rose border border-brand-rose/20;
+  }
+
+  .badge-indigo {
+    @apply badge bg-brand-indigo/15 text-brand-indigo-light border border-brand-indigo/20;
+  }
+
+  .progress-bar {
+    @apply h-2 rounded-full bg-white/[0.06] overflow-hidden;
+  }
+
+  .progress-fill {
+    @apply h-full rounded-full transition-all duration-700 ease-out;
+  }
+
+  .stat-card {
+    @apply glass-card p-5 flex flex-col gap-1;
+  }
+
+  .vendor-pipeline-step {
+    @apply flex items-center gap-2 text-xs font-medium px-3 py-1.5 rounded-full transition-all duration-300 cursor-pointer;
+  }
+}
+
+@layer utilities {
+  .animate-shimmer-bg {
+    background-size: 200% 100%;
+    animation: shimmer 2s infinite linear;
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+}
