@@ -10,6 +10,8 @@ import {
 
 // ─── Live Gemini AI Service ──────────────────────────────────
 
+const GEMINI_MODEL = 'gemini-3.8-flash';
+
 function buildSystemPrompt(event: CelebrationEvent): string {
   return `You are Haven AI, a luxury celebration and event planning assistant. You are helping plan a ${event.type} event called "${event.name}".
 
@@ -39,36 +41,23 @@ export async function sendLiveChat(
   event: CelebrationEvent,
   userMessage: string,
 ): Promise<string> {
-  const modelsToTry = ['gemini-3.8-flash', 'gemini-2.5-flash', 'gemini-1.5-flash', 'gemini-2.0-flash'];
   const ai = new GoogleGenAI({ apiKey });
-  let lastError: any = null;
+  try {
+    const response = await ai.models.generateContent({
+      model: GEMINI_MODEL,
+      contents: [
+        { role: 'user', parts: [{ text: buildSystemPrompt(event) }] },
+        { role: 'model', parts: [{ text: 'I understand! I\'m Haven AI, ready to help plan your event. How can I assist you?' }] },
+        { role: 'user', parts: [{ text: userMessage }] },
+      ],
+    });
 
-  for (const model of modelsToTry) {
-    try {
-      const response = await ai.models.generateContent({
-        model,
-        contents: [
-          { role: 'user', parts: [{ text: buildSystemPrompt(event) }] },
-          { role: 'model', parts: [{ text: 'I understand! I\'m Haven AI, ready to help plan your event. How can I assist you?' }] },
-          { role: 'user', parts: [{ text: userMessage }] },
-        ],
-      });
-
-      const text = response.text ?? 'I apologize, I wasn\'t able to generate a response. Please try again.';
-      return sanitizeMarkdown(text);
-    } catch (error: any) {
-      lastError = error;
-      // If model not found (404), continue to next model in list
-      const errorMsg = error?.message || '';
-      if (errorMsg.includes('404') || errorMsg.includes('NOT_FOUND') || errorMsg.includes('no longer available')) {
-        continue;
-      }
-      break;
-    }
+    const text = response.text ?? 'I apologize, I wasn\'t able to generate a response. Please try again.';
+    return sanitizeMarkdown(text);
+  } catch (error) {
+    const message = error instanceof Error ? error.message : 'Unknown error';
+    throw new Error(`AI service error: ${message}`);
   }
-
-  const message = lastError instanceof Error ? lastError.message : 'Unknown error';
-  throw new Error(`AI service error: ${message}`);
 }
 
 export async function generateLiveThemes(
@@ -78,7 +67,7 @@ export async function generateLiveThemes(
   try {
     const ai = new GoogleGenAI({ apiKey });
     const response = await ai.models.generateContent({
-      model: 'gemini-3.8-flash',
+      model: GEMINI_MODEL,
       contents: [
         {
           role: 'user',

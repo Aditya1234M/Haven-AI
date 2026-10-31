@@ -122,7 +122,7 @@ export function App() {
               }`}
             >
               <Zap size={12} />
-              <span>{aiConfig.mode === 'live' ? 'Live Gemini 2.0' : 'Evaluator AI'}</span>
+              <span>{aiConfig.mode === 'live' ? 'Live Gemini 3.8' : 'Evaluator AI'}</span>
             </div>
 
             {/* Presets Quick Switcher */}

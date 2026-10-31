@@ -28,7 +28,7 @@
 ### 3. Haven AI Co-Pilot
 - Context-aware event strategist with dual-mode architecture:
   - **Evaluator Mode (Offline)**: Deterministic, hyper-realistic responses for zero-latency testing without external API keys.
-  - **Live Gemini Mode**: Client-side Gemini 2.0 Flash integration with local in-memory key masking and zero server leakage.
+  - **Live Gemini Mode**: Client-side Gemini 3.8 Flash integration with a runtime-only key flow and zero server leakage.
 
 ---
 

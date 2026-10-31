@@ -261,7 +261,7 @@ export const useAppStore = create<AppState>()(
       })),
       clearChat: () => set({ chatMessages: [] }),
 
-      // AI Config (auto-enables Live Gemini 2.0 if environment key is provided)
+      // AI Config (auto-enables Live Gemini if an environment key is provided)
       aiConfig: {
         mode: (typeof import.meta !== 'undefined' && import.meta.env?.VITE_GEMINI_API_KEY) ? 'live' : 'simulated',
         apiKey: (typeof import.meta !== 'undefined' && import.meta.env?.VITE_GEMINI_API_KEY) || '',

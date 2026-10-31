@@ -126,7 +126,7 @@ export function AICoPilot() {
                   ? 'bg-brand-gold text-surface-50 font-semibold shadow-gold'
                   : 'text-white/50 hover:text-white'
               }`}
-              title="Connect client-side Gemini 2.0 Flash API"
+              title="Connect client-side Gemini 3.8 Flash API"
             >
               <Key size={13} /> Live Gemini Mode
             </button>
@@ -144,7 +144,7 @@ export function AICoPilot() {
         </div>
       </div>
 
-      {/* Live API Status / Vault Drawer (if Live Mode) */}
+      {/* Live API status and client-side key controls */}
       {aiConfig.mode === 'live' && (
         <motion.div
           initial={{ opacity: 0, height: 0 }}
@@ -198,7 +198,7 @@ export function AICoPilot() {
                 </div>
               </form>
               <div className="flex items-center justify-between text-[11px] text-white/40 mt-1.5 px-1">
-                <span>🔒 Key remains strictly client-side in RAM and is never logged or saved to server.</span>
+                <span>🔒 Key stays client-side in memory and is never persisted by Haven AI.</span>
                 {aiConfig.apiKey && <span>Active: {maskApiKey(aiConfig.apiKey)}</span>}
               </div>
             </div>
